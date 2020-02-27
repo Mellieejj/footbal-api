@@ -20,9 +20,21 @@ router.get("/team/:teamId", (request, response, next) => {
   Team.findByPk(request.params.teamId)
     .then(team => {
       if (!team) {
-        res.status(404).end();
+        response.status(404).end();
       } else {
         response.json(team);
+      }
+    })
+    .catch(next);
+});
+
+router.put("/team/:teamId", (request, response, next) => {
+  Team.findByPk(request.params.teamId)
+    .then(team => {
+      if (team) {
+        team.update(request.body).then(user => response.json(team));
+      } else {
+        response.status(404).end();
       }
     })
     .catch(next);
