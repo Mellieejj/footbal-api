@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const Player = require("./model");
+const Team = require("../team/model");
 
 const router = new Router();
 
@@ -17,7 +18,7 @@ router.post("/players", (request, response, next) => {
 
 router.get("/players/:playerId", (request, response, next) => {
   console.log(request.params.playerId);
-  Player.findByPk(request.params.playerId)
+  Player.findByPk(request.params.playerId, { include: [Team] })
     .then(player => {
       if (!player) {
         response.status(404).end();
@@ -28,7 +29,7 @@ router.get("/players/:playerId", (request, response, next) => {
     .catch(next);
 });
 
-router.put("/player/:playerId", (request, response, next) => {
+router.put("/players/:playerId", (request, response, next) => {
   const number = request.body.number;
   console.log(number);
   Player.findByPk(request.params.playerId)
